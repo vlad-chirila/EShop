@@ -1,17 +1,28 @@
-﻿namespace Catalog.API.Products.CreateProduct
-{
-    using MediatR;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using BuildingBlock.CQRS;
+using Catalog.API.Models;
 
-    public record CreateProductCommand(Guid Id, string Name, string Description, List<string> Category, string ImageFile, decimal Price) : IRequest<CreateProductResult>;
+namespace Catalog.API.Products.CreateProduct
+{
+    public record CreateProductCommand(Guid Id, string Name, string Description, List<string> Category, string ImageFile, decimal Price) 
+        : ICommand<CreateProductResult>;
     public record CreateProductResult(Guid Id);
 
-    internal class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductResult>
+    internal class CreateProductCommandHandler
+        : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
-        public Task<CreateProductResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
-            // Business logic to create a product.
+            var product = new Product()
+            {
+                Name = command.Name,
+                Description = command.Description,
+                Category = command.Category,
+                ImageFile = command.ImageFile,
+                Price = command.Price,
+            };
+
+
+
             throw new NotImplementedException();
         }
     }
